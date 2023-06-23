@@ -1,0 +1,15 @@
+{
+    "name": "dannkol/admin-site",
+    "authors": [
+        {
+            "name": "Daniel Manosalva",
+            "email": "manosalvasierra@gmail.com"
+        }
+    ],
+    "require": {
+        "bramus/router": "^1.6"
+    },
+    "autoload": {
+        "classmap": ["./scripts"]
+    }
+}
