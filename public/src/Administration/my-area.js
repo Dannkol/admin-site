@@ -7,6 +7,9 @@ export default {
     name: componet[2],
     componet() {
         this.name = class extends HTMLElement {
+
+            url = 'http://localhost/SpUkM01-073/admin-site/areas/'
+
             constructor() {
                 super();
 
@@ -34,6 +37,7 @@ export default {
 
             async drawtable() {
 
+               
 
                 let headersList = {
                     "Accept": "application/json",
@@ -41,7 +45,7 @@ export default {
                 }
 
 
-                let response = await fetch("http://localhost/admin-site/areas", {
+                let response = await fetch(`${this.url}`, {
                     method: "GET",
                     headers: headersList
                 });
@@ -83,7 +87,7 @@ export default {
                     "Content-Type": "application/json"
                 }
                 console.log(item.id);
-                let response = await fetch(`http://localhost/admin-site/areas/${item.id}`, {
+                let response = await fetch(`${this.url}${item.id}`, {
                     method: "DELETE",
                     headers: headersList
                 });
@@ -104,7 +108,7 @@ export default {
                      "name": data
                    });
                    
-                   let response = await fetch(`http://localhost/admin-site/areas/${id}`, { 
+                   let response = await fetch(`${this.url}${id}`, { 
                      method: "PUT",
                      body: bodyContent,
                      headers: headersList
@@ -163,7 +167,7 @@ export default {
                     }
 
 
-                    let response = await fetch("http://localhost/admin-site/areas", {
+                    let response = await fetch(`${this.url}`, {
                         method: "POST",
                         body: JSON.stringify(data),
                         headers: headersList

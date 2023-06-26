@@ -7,6 +7,9 @@ export default {
     name: componet[2],
     componet() {
         this.name = class extends HTMLElement {
+
+            url = "http://localhost/SpUkM01-073/admin-site/cities/"
+
             constructor() {
                 super();
 
@@ -41,7 +44,7 @@ export default {
                 }
 
 
-                let response = await fetch("http://localhost/admin-site/cities", {
+                let response = await fetch(`${this.url}`, {
                     method: "GET",
                     headers: headersList
                 });
@@ -81,7 +84,7 @@ export default {
 
                 });
 
-                let response_counrty = await fetch("http://localhost/admin-site/regions", {
+                let response_counrty = await fetch(`${this.url}`, {
                     method: "GET",
                     headers: headersList
                 });
@@ -103,7 +106,7 @@ export default {
                     "Content-Type": "application/json"
                 }
                 console.log(item.id);
-                let response = await fetch(`http://localhost/admin-site/cities/${item.id}`, {
+                let response = await fetch(`${this.url}${item.id}`, {
                     method: "DELETE",
                     headers: headersList
                 });
@@ -125,7 +128,7 @@ export default {
                     "region": region
                 });
 
-                let response = await fetch(`http://localhost/admin-site/cities/${id}`, {
+                let response = await fetch(`${this.url}${id}`, {
                     method: "PUT",
                     body: bodyContent,
                     headers: headersList
@@ -194,7 +197,7 @@ export default {
                     console.log(data);
 
 
-                    let response = await fetch("http://localhost/admin-site/cities", {
+                    let response = await fetch(`${this.url}`, {
                         method: "POST",
                         body: JSON.stringify(data),
                         headers: headersList
