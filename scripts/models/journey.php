@@ -5,16 +5,19 @@ namespace App;
 
 use connect;
 
-class ModelAreas extends connect
+class ModelJourney extends connect
 {
     private static $message;
 
     public static function post($data)
     {
         try {
-            $query = 'INSERT INTO areas(name_area) VALUES(:name_area)';
+            $query = 'INSERT INTO journey(name_journey , check_in, check_out) VALUES(:name_journey, :check_in, :check_out)';
             $res = self::getConnection()->prepare($query);
-            $res->bindParam(":name_area", $data['name']);
+            $res->bindParam(":name_journey", $data['name_journey']);
+            $res->bindParam(":check_in", $data['check_in']);
+            $res->bindParam(":check_out", $data['check_out']);
+
             $res->execute();
             self::$message = ["Code" => 200 + $res->rowCount(), "Message" => "inserted data"];
         } catch (\PDOException $e) {
@@ -27,7 +30,7 @@ class ModelAreas extends connect
     public static function getall()
     {
         try {
-            $queryGetAll = 'SELECT id , name_area FROM areas';
+            $queryGetAll = 'SELECT id , name_journey, check_in, check_out FROM journey';
             $res = self::getConnection()->prepare($queryGetAll);
             $res->execute();
             self::$message = ["Code" => 200 + $res->rowCount(), "Message" => $res->fetchAll(\PDO::FETCH_ASSOC)];
@@ -41,8 +44,8 @@ class ModelAreas extends connect
     public static function getid($id)
     {
         try {
-            $queryGetid = 'SELECT id , nombre AS name_area FROM areas';
-            $queryGetid .= ' WHERE t1.id = :id';
+            $queryGetid = 'SELECT id , name_journey, check_in, check_out FROM journey';
+            $queryGetid .= ' WHERE id = :id';
             $res = self::getConnection()->prepare($queryGetid);
             $res->bindParam(':id', $id);
             $res->execute();
@@ -57,7 +60,7 @@ class ModelAreas extends connect
     public static function delete($id)
     {
         try {
-            $query = 'DELETE FROM areas WHERE id = :id';
+            $query = 'DELETE FROM journey WHERE id = :id';
             $res = self::getConnection()->prepare($query);
             $res->bindParam(':id', $id);
             $res->execute();
@@ -72,12 +75,20 @@ class ModelAreas extends connect
     public static function update($id, $data)
     {
         try {
-            $query = 'UPDATE areas SET';
+            $query = 'UPDATE journey SET';
             $params = [];
 
-            if ($data['name'] !== null) {
-                $query .= ' name_area = :name_area,';
-                $params[':name_area'] = $data['name'];
+            if ($data['name_journey'] !== null) {
+                $query .= ' name_journey = :name_journey,';
+                $params[':name_journey'] = $data['name_journey'];
+            }
+            if ($data['check_in'] !== null) {
+                $query .= ' check_in = :check_in,';
+                $params[':check_in'] = $data['check_in'];
+            }
+            if ($data['check_out'] !== null) {
+                $query .= ' check_out = :check_out,';
+                $params[':check_out'] = $data['check_out'];
             }
 
             // Eliminar la coma final del query

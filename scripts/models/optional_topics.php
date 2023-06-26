@@ -1,20 +1,24 @@
 <?php
 
-
 namespace App;
 
 use connect;
 
-class ModelAreas extends connect
+class ModelaOptional_topics extends connect
 {
     private static $message;
 
     public static function post($data)
     {
         try {
-            $query = 'INSERT INTO areas(name_area) VALUES(:name_area)';
+            $query = 'INSERT INTO optional_topics(id_topic, id_team, id_subject, id_camper, id_team_educator) VALUES(:topic, :team, :subject, :camper, :team_educator)';
             $res = self::getConnection()->prepare($query);
-            $res->bindParam(":name_area", $data['name']);
+            $res->bindParam(":topic", $data['topic']);
+            $res->bindParam(":team", $data['team']);
+            $res->bindParam(":subject", $data['subject']);
+            $res->bindParam(":camper", $data['camper']);
+            $res->bindParam(":team_educator", $data['team_educator']);
+
             $res->execute();
             self::$message = ["Code" => 200 + $res->rowCount(), "Message" => "inserted data"];
         } catch (\PDOException $e) {
@@ -27,7 +31,13 @@ class ModelAreas extends connect
     public static function getall()
     {
         try {
-            $queryGetAll = 'SELECT id , name_area FROM areas';
+            $queryGetAll = 'SELECT t1.id AS "identificador", t2.id , t3.id , t4.id, t5.id, t6.id FROM optional_topics AS t1';
+            $queryGetAll .= ' INNER JOIN topics AS t2 ON t1.id_topic = t2.id';
+            $queryGetAll .= ' INNER JOIN team_schedule AS t3 ON t1.id_team = t3.id';
+            $queryGetAll .= ' INNER JOIN subjects AS t4 ON t1.id_subject = t4.id';
+            $queryGetAll .= ' INNER JOIN campers AS t5 ON t1.id_camper = t5.id';
+            $queryGetAll .= ' INNER JOIN team_educators AS t5 ON t1.id_team_educator = t6.id';
+
             $res = self::getConnection()->prepare($queryGetAll);
             $res->execute();
             self::$message = ["Code" => 200 + $res->rowCount(), "Message" => $res->fetchAll(\PDO::FETCH_ASSOC)];
@@ -41,7 +51,12 @@ class ModelAreas extends connect
     public static function getid($id)
     {
         try {
-            $queryGetid = 'SELECT id , nombre AS name_area FROM areas';
+            $queryGetid = 'SELECT t1.id AS "identificador", t2.id , t3.id , t4.id, t5.id, t6.id FROM optional_topics AS t1';
+            $queryGetid .= ' INNER JOIN topics AS t2 ON t1.id_topic = t2.id';
+            $queryGetid .= ' INNER JOIN team_schedule AS t3 ON t1.id_team = t3.id';
+            $queryGetid .= ' INNER JOIN subjects AS t4 ON t1.id_subject = t4.id';
+            $queryGetid .= ' INNER JOIN campers AS t5 ON t1.id_camper = t5.id';
+            $queryGetid .= ' INNER JOIN team_educators AS t5 ON t1.id_team_educator = t6.id';
             $queryGetid .= ' WHERE t1.id = :id';
             $res = self::getConnection()->prepare($queryGetid);
             $res->bindParam(':id', $id);
@@ -57,7 +72,7 @@ class ModelAreas extends connect
     public static function delete($id)
     {
         try {
-            $query = 'DELETE FROM areas WHERE id = :id';
+            $query = 'DELETE FROM optional_topics WHERE id = :id';
             $res = self::getConnection()->prepare($query);
             $res->bindParam(':id', $id);
             $res->execute();
@@ -72,13 +87,30 @@ class ModelAreas extends connect
     public static function update($id, $data)
     {
         try {
-            $query = 'UPDATE areas SET';
+            $query = 'UPDATE optional_topics SET';
             $params = [];
 
-            if ($data['name'] !== null) {
-                $query .= ' name_area = :name_area,';
-                $params[':name_area'] = $data['name'];
+            if ($data['topic'] !== null) {
+                $query .= ' id_topic = :id_topic,';
+                $params[':id_topic'] = $data['topic'];
             }
+            if (isset($data['team'])) {
+                $query .= ' id_team = :id_team,';
+                $params[':id_team'] = $data['team'];
+            }
+            if (isset($data['subject'])) {
+                $query .= ' id_subject = :id_subject,';
+                $params[':id_subject'] = $data['subject'];
+            }
+            if (isset($data['camper'])) {
+                $query .= ' id_camper = :id_camper,';
+                $params[':id_camper'] = $data['camper'];
+            }
+            if (isset($data['team_educator'])) {
+                $query .= ' id_team_educator = :id_team_educator,';
+                $params[':id_team_educator'] = $data['team_educator'];
+            }
+
 
             // Eliminar la coma final del query
             $query = rtrim($query, ',');

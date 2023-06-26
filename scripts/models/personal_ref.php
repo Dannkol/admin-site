@@ -5,16 +5,22 @@ namespace App;
 
 use connect;
 
-class ModelAreas extends connect
+class ModelPersonal_ref extends connect
 {
     private static $message;
 
     public static function post($data)
     {
         try {
-            $query = 'INSERT INTO areas(name_area) VALUES(:name_area)';
+            $query = 'INSERT INTO personal_ref(full_name , cel_number, relationship, occupation) VALUES(:full_name, :cel_number, :relationship, :occupation)';
             $res = self::getConnection()->prepare($query);
-            $res->bindParam(":name_area", $data['name']);
+            $res->bindParam(":full_name", $data['full_name']);
+            $res->bindParam(":cel_number", $data['cel_number']);
+            $res->bindParam(":relationship", $data['relationship']);
+            $res->bindParam(":occupation", $data['occupation']);
+
+
+
             $res->execute();
             self::$message = ["Code" => 200 + $res->rowCount(), "Message" => "inserted data"];
         } catch (\PDOException $e) {
@@ -27,7 +33,7 @@ class ModelAreas extends connect
     public static function getall()
     {
         try {
-            $queryGetAll = 'SELECT id , name_area FROM areas';
+            $queryGetAll = 'SELECT id , full_name, cel_number, relationship, occupation FROM personal_ref';
             $res = self::getConnection()->prepare($queryGetAll);
             $res->execute();
             self::$message = ["Code" => 200 + $res->rowCount(), "Message" => $res->fetchAll(\PDO::FETCH_ASSOC)];
@@ -41,8 +47,8 @@ class ModelAreas extends connect
     public static function getid($id)
     {
         try {
-            $queryGetid = 'SELECT id , nombre AS name_area FROM areas';
-            $queryGetid .= ' WHERE t1.id = :id';
+            $queryGetid = 'SELECT id , full_name, cel_number, relationship, occupation FROM personal_ref';
+            $queryGetid .= ' WHERE id = :id';
             $res = self::getConnection()->prepare($queryGetid);
             $res->bindParam(':id', $id);
             $res->execute();
@@ -57,7 +63,7 @@ class ModelAreas extends connect
     public static function delete($id)
     {
         try {
-            $query = 'DELETE FROM areas WHERE id = :id';
+            $query = 'DELETE FROM personal_ref WHERE id = :id';
             $res = self::getConnection()->prepare($query);
             $res->bindParam(':id', $id);
             $res->execute();
@@ -72,12 +78,24 @@ class ModelAreas extends connect
     public static function update($id, $data)
     {
         try {
-            $query = 'UPDATE areas SET';
+            $query = 'UPDATE personal_ref SET';
             $params = [];
 
-            if ($data['name'] !== null) {
-                $query .= ' name_area = :name_area,';
-                $params[':name_area'] = $data['name'];
+            if ($data['full_name'] !== null) {
+                $query .= ' full_name = :full_name,';
+                $params[':full_name'] = $data['full_name'];
+            }
+            if ($data['cel_number'] !== null) {
+                $query .= ' cel_number = :cel_number,';
+                $params[':cel_number'] = $data['cel_number'];
+            }
+            if ($data['relationship'] !== null) {
+                $query .= ' relationship = :relationship,';
+                $params[':relationship'] = $data['relationship'];
+            }
+            if ($data['occupation'] !== null) {
+                $query .= ' occupation = :occupation,';
+                $params[':occupation'] = $data['occupation'];
             }
 
             // Eliminar la coma final del query

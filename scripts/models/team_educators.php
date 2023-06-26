@@ -5,16 +5,17 @@ namespace App;
 
 use connect;
 
-class ModelAreas extends connect
+class ModelTeam_educators extends connect
 {
     private static $message;
 
     public static function post($data)
     {
         try {
-            $query = 'INSERT INTO areas(name_area) VALUES(:name_area)';
+            $query = 'INSERT INTO team_educators(name_rol) VALUES(:name_rol)';
             $res = self::getConnection()->prepare($query);
-            $res->bindParam(":name_area", $data['name']);
+            $res->bindParam(":name_rol", $data['name_rol']);
+
             $res->execute();
             self::$message = ["Code" => 200 + $res->rowCount(), "Message" => "inserted data"];
         } catch (\PDOException $e) {
@@ -27,7 +28,7 @@ class ModelAreas extends connect
     public static function getall()
     {
         try {
-            $queryGetAll = 'SELECT id , name_area FROM areas';
+            $queryGetAll = 'SELECT id , name_rol FROM team_educators';
             $res = self::getConnection()->prepare($queryGetAll);
             $res->execute();
             self::$message = ["Code" => 200 + $res->rowCount(), "Message" => $res->fetchAll(\PDO::FETCH_ASSOC)];
@@ -41,8 +42,8 @@ class ModelAreas extends connect
     public static function getid($id)
     {
         try {
-            $queryGetid = 'SELECT id , nombre AS name_area FROM areas';
-            $queryGetid .= ' WHERE t1.id = :id';
+            $queryGetid = 'SELECT id , name_rol FROM team_educators';
+            $queryGetid .= ' WHERE id = :id';
             $res = self::getConnection()->prepare($queryGetid);
             $res->bindParam(':id', $id);
             $res->execute();
@@ -57,7 +58,7 @@ class ModelAreas extends connect
     public static function delete($id)
     {
         try {
-            $query = 'DELETE FROM areas WHERE id = :id';
+            $query = 'DELETE FROM team_educators WHERE id = :id';
             $res = self::getConnection()->prepare($query);
             $res->bindParam(':id', $id);
             $res->execute();
@@ -72,14 +73,14 @@ class ModelAreas extends connect
     public static function update($id, $data)
     {
         try {
-            $query = 'UPDATE areas SET';
+            $query = 'UPDATE team_educators SET';
             $params = [];
 
-            if ($data['name'] !== null) {
-                $query .= ' name_area = :name_area,';
-                $params[':name_area'] = $data['name'];
+            if ($data['name_rol'] !== null) {
+                $query .= ' name_rol = :name_rol,';
+                $params[':name_rol'] = $data['name_rol'];
             }
-
+            
             // Eliminar la coma final del query
             $query = rtrim($query, ',');
 

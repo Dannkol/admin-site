@@ -5,16 +5,18 @@ namespace App;
 
 use connect;
 
-class ModelAreas extends connect
+class ModelCities extends connect
 {
     private static $message;
 
     public static function post($data)
     {
         try {
-            $query = 'INSERT INTO areas(name_area) VALUES(:name_area)';
+            $query = 'INSERT INTO cities(name_city , id_region) VALUES(:name_city, :region)';
             $res = self::getConnection()->prepare($query);
-            $res->bindParam(":name_area", $data['name']);
+            $res->bindParam(":name_city", $data['name_city']);
+            $res->bindParam(":region", $data['region']);
+
             $res->execute();
             self::$message = ["Code" => 200 + $res->rowCount(), "Message" => "inserted data"];
         } catch (\PDOException $e) {
@@ -27,7 +29,8 @@ class ModelAreas extends connect
     public static function getall()
     {
         try {
-            $queryGetAll = 'SELECT id , name_area FROM areas';
+            $queryGetAll = 'SELECT t1.id , name_city, id_region, name_region FROM cities AS t1';
+            $queryGetAll .= ' INNER JOIN regions AS t2 ON t1.id_region = t2.id';
             $res = self::getConnection()->prepare($queryGetAll);
             $res->execute();
             self::$message = ["Code" => 200 + $res->rowCount(), "Message" => $res->fetchAll(\PDO::FETCH_ASSOC)];
@@ -41,8 +44,8 @@ class ModelAreas extends connect
     public static function getid($id)
     {
         try {
-            $queryGetid = 'SELECT id , nombre AS name_area FROM areas';
-            $queryGetid .= ' WHERE t1.id = :id';
+            $queryGetid = 'SELECT id , name_city, id_region As region FROM cities ';
+            $queryGetid .= ' WHERE id = :id';
             $res = self::getConnection()->prepare($queryGetid);
             $res->bindParam(':id', $id);
             $res->execute();
@@ -57,7 +60,7 @@ class ModelAreas extends connect
     public static function delete($id)
     {
         try {
-            $query = 'DELETE FROM areas WHERE id = :id';
+            $query = 'DELETE FROM cities WHERE id = :id';
             $res = self::getConnection()->prepare($query);
             $res->bindParam(':id', $id);
             $res->execute();
@@ -72,12 +75,16 @@ class ModelAreas extends connect
     public static function update($id, $data)
     {
         try {
-            $query = 'UPDATE areas SET';
+            $query = 'UPDATE cities SET';
             $params = [];
 
-            if ($data['name'] !== null) {
-                $query .= ' name_area = :name_area,';
-                $params[':name_area'] = $data['name'];
+            if ($data['name_city'] !== null) {
+                $query .= ' name_city = :name_city,';
+                $params[':name_city'] = $data['name_city'];
+            }
+            if ($data['region'] !== null) {
+                $query .= ' id_region = :id_region,';
+                $params[':id_region'] = $data['region'];
             }
 
             // Eliminar la coma final del query

@@ -1,20 +1,22 @@
 <?php
 
-
 namespace App;
 
 use connect;
 
-class ModelAreas extends connect
+class ModelaMaint_area extends connect
 {
     private static $message;
 
     public static function post($data)
     {
         try {
-            $query = 'INSERT INTO areas(name_area) VALUES(:name_area)';
+            $query = 'INSERT INTO maint_area(id_area,id_staff,id_position,id_journeys) VALUES(:area,:staff,:position,:journeys)';
             $res = self::getConnection()->prepare($query);
-            $res->bindParam(":name_area", $data['name']);
+            $res->bindParam(":area", $data['area']);
+            $res->bindParam(":staff", $data['staff']);
+            $res->bindParam(":position", $data['position']);
+            $res->bindParam(":journeys", $data['journeys']);
             $res->execute();
             self::$message = ["Code" => 200 + $res->rowCount(), "Message" => "inserted data"];
         } catch (\PDOException $e) {
@@ -27,7 +29,12 @@ class ModelAreas extends connect
     public static function getall()
     {
         try {
-            $queryGetAll = 'SELECT id , name_area FROM areas';
+            $queryGetAll = 'SELECT t1.id AS "identificador", t2.name_area AS "area", t3.first_name AS "staff_first_name", t4.name_position AS "position", t5.name_journey AS "journeys" FROM maint_area AS t1';
+            $queryGetAll .= ' INNER JOIN areas AS t2 ON t1.id_area = t2.id';
+            $queryGetAll .= ' INNER JOIN staff AS t3 ON t1.id_staff = t3.id';
+            $queryGetAll .= ' INNER JOIN position AS t4 ON t1.id_position = t4.id';
+            $queryGetAll .= ' INNER JOIN journey AS t5 ON t1.id_journeys = t5.id';
+
             $res = self::getConnection()->prepare($queryGetAll);
             $res->execute();
             self::$message = ["Code" => 200 + $res->rowCount(), "Message" => $res->fetchAll(\PDO::FETCH_ASSOC)];
@@ -41,7 +48,11 @@ class ModelAreas extends connect
     public static function getid($id)
     {
         try {
-            $queryGetid = 'SELECT id , nombre AS name_area FROM areas';
+            $queryGetid = 'SELECT t1.id AS "identificador", t2.name_area AS "area", t3.first_name AS "staff_first_name", t4.name_position AS "position", t5.name_journey AS "journeys" FROM maint_area AS t1';
+            $queryGetid .= ' INNER JOIN areas AS t2 ON t1.id_area = t2.id';
+            $queryGetid .= ' INNER JOIN staff AS t3 ON t1.id_staff = t3.id';
+            $queryGetid .= ' INNER JOIN position AS t4 ON t1.id_position = t4.id';
+            $queryGetid .= ' INNER JOIN journey AS t5 ON t1.id_journeys = t5.id';
             $queryGetid .= ' WHERE t1.id = :id';
             $res = self::getConnection()->prepare($queryGetid);
             $res->bindParam(':id', $id);
@@ -57,7 +68,7 @@ class ModelAreas extends connect
     public static function delete($id)
     {
         try {
-            $query = 'DELETE FROM areas WHERE id = :id';
+            $query = 'DELETE FROM maint_area WHERE id = :id';
             $res = self::getConnection()->prepare($query);
             $res->bindParam(':id', $id);
             $res->execute();
@@ -72,13 +83,26 @@ class ModelAreas extends connect
     public static function update($id, $data)
     {
         try {
-            $query = 'UPDATE areas SET';
+            $query = 'UPDATE maint_area SET';
             $params = [];
 
-            if ($data['name'] !== null) {
-                $query .= ' name_area = :name_area,';
-                $params[':name_area'] = $data['name'];
+            if ($data['area'] !== null) {
+                $query .= ' id_area = :id_area,';
+                $params[':id_area'] = $data['area'];
             }
+            if (isset($data['staff'])) {
+                $query .= ' id_staff = :id_staff,';
+                $params[':id_staff'] = $data['staff'];
+            }
+            if (isset($data['position'])) {
+                $query .= ' id_position = :id_position,';
+                $params[':id_position'] = $data['position'];
+            }
+            if (isset($data['journeys'])) {
+                $query .= ' id_journeys = :id_journeys,';
+                $params[':id_journeys'] = $data['journeys'];
+            }
+
 
             // Eliminar la coma final del query
             $query = rtrim($query, ',');

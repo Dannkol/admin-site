@@ -1,20 +1,27 @@
 <?php
 
-
 namespace App;
 
 use connect;
 
-class ModelAreas extends connect
+class ModelStaff extends connect
 {
     private static $message;
 
     public static function post($data)
     {
         try {
-            $query = 'INSERT INTO areas(name_area) VALUES(:name_area)';
+            $query = 'INSERT INTO staff(doc, first_name , second_name, first_surname, second_surname, eps , id_area, id_city) VALUES(:doc, :first_name, :second_name, :first_surname, :second_surname, :eps, :id_area, :id_city)';
             $res = self::getConnection()->prepare($query);
-            $res->bindParam(":name_area", $data['name']);
+            $res->bindParam(":doc", $data['doc']);
+            $res->bindParam(":first_name", $data['first_name']);
+            $res->bindParam(":second_name", $data['second_name']);
+            $res->bindParam(":first_surname", $data['first_surname']);
+            $res->bindParam(":second_surname", $data['second_surname']);
+            $res->bindParam(":eps", $data['eps']);
+            $res->bindParam(":id_area", $data['area']);
+            $res->bindParam(":id_city", $data['city']);
+
             $res->execute();
             self::$message = ["Code" => 200 + $res->rowCount(), "Message" => "inserted data"];
         } catch (\PDOException $e) {
@@ -27,7 +34,8 @@ class ModelAreas extends connect
     public static function getall()
     {
         try {
-            $queryGetAll = 'SELECT id , name_area FROM areas';
+            $queryGetAll = 'SELECT id AS "identificador", doc, first_name, second_name, first_surname, second_surname, eps, id_area, id_city FROM staff ';
+
             $res = self::getConnection()->prepare($queryGetAll);
             $res->execute();
             self::$message = ["Code" => 200 + $res->rowCount(), "Message" => $res->fetchAll(\PDO::FETCH_ASSOC)];
@@ -41,8 +49,8 @@ class ModelAreas extends connect
     public static function getid($id)
     {
         try {
-            $queryGetid = 'SELECT id , nombre AS name_area FROM areas';
-            $queryGetid .= ' WHERE t1.id = :id';
+            $queryGetid = 'SELECT id AS "identificador", doc, first_name, second_name, first_surname, second_surname, eps, id_area, id_city FROM staff ';
+            $queryGetid .= ' WHERE id = :id';
             $res = self::getConnection()->prepare($queryGetid);
             $res->bindParam(':id', $id);
             $res->execute();
@@ -57,7 +65,7 @@ class ModelAreas extends connect
     public static function delete($id)
     {
         try {
-            $query = 'DELETE FROM areas WHERE id = :id';
+            $query = 'DELETE FROM staff WHERE id = :id';
             $res = self::getConnection()->prepare($query);
             $res->bindParam(':id', $id);
             $res->execute();
@@ -72,13 +80,38 @@ class ModelAreas extends connect
     public static function update($id, $data)
     {
         try {
-            $query = 'UPDATE areas SET';
+            $query = 'UPDATE staff SET';
             $params = [];
 
-            if ($data['name'] !== null) {
-                $query .= ' name_area = :name_area,';
-                $params[':name_area'] = $data['name'];
+            if ($data['first_name'] !== null) {
+                $query .= ' first_name = :first_name,';
+                $params[':first_name'] = $data['first_name'];
             }
+            if (isset($data['second_name'])) {
+                $query .= ' second_name = :second_name,';
+                $params[':second_name'] = $data['second_name'];
+            }
+            if (isset($data['first_surname'])) {
+                $query .= ' first_surname = :first_surname,';
+                $params[':first_surname'] = $data['first_surname'];
+            }
+            if (isset($data['second_surname'])) {
+                $query .= ' second_surname = :second_surname,';
+                $params[':second_surname'] = $data['second_surname'];
+            }
+            if (isset($data['eps'])) {
+                $query .= ' eps = :eps,';
+                $params[':eps'] = $data['eps'];
+            }
+            if (isset($data['area'])) {
+                $query .= ' id_area = :id_area,';
+                $params[':id_area'] = $data['area'];
+            }
+            if (isset($data['city'])) {
+                $query .= ' id_city = :id_city,';
+                $params[':id_city'] = $data['city'];
+            }
+
 
             // Eliminar la coma final del query
             $query = rtrim($query, ',');

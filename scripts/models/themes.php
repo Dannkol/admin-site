@@ -1,20 +1,25 @@
 <?php
 
-
 namespace App;
 
 use connect;
 
-class ModelAreas extends connect
+class ModelThemes extends connect
 {
     private static $message;
 
     public static function post($data)
     {
         try {
-            $query = 'INSERT INTO areas(name_area) VALUES(:name_area)';
+            $query = 'INSERT INTO themes(id_chapter, name_theme , start_date, end_date, description, duration_days) VALUES(:chapter, :name_theme, :start_date, :end_date, :description, :duration_day)';
             $res = self::getConnection()->prepare($query);
-            $res->bindParam(":name_area", $data['name']);
+            $res->bindParam(":id_chapter", $data['chapter']);
+            $res->bindParam(":name_theme", $data['name_theme']);
+            $res->bindParam(":start_date", $data['start_date']);
+            $res->bindParam(":end_date", $data['end_date']);
+            $res->bindParam(":description", $data['description']);
+            $res->bindParam(":duration_days", $data['duration_days']);
+
             $res->execute();
             self::$message = ["Code" => 200 + $res->rowCount(), "Message" => "inserted data"];
         } catch (\PDOException $e) {
@@ -27,7 +32,9 @@ class ModelAreas extends connect
     public static function getall()
     {
         try {
-            $queryGetAll = 'SELECT id , name_area FROM areas';
+            $queryGetAll = 'SELECT t1.id AS "identificador", t2.id AS "id_chapter", t2.name_chapter AS "chapter" , start_date , end_date , description , duration_days FROM themes AS t1';
+            $queryGetAll .= ' INNER JOIN chapters AS t2 ON t1.id_chapter = t2.id';
+
             $res = self::getConnection()->prepare($queryGetAll);
             $res->execute();
             self::$message = ["Code" => 200 + $res->rowCount(), "Message" => $res->fetchAll(\PDO::FETCH_ASSOC)];
@@ -41,7 +48,8 @@ class ModelAreas extends connect
     public static function getid($id)
     {
         try {
-            $queryGetid = 'SELECT id , nombre AS name_area FROM areas';
+            $queryGetid = 'SELECT t1.id AS "identificador", t2.id AS "id_chapter", t2.name_chapter AS "chapter" , start_date , end_date , description , duration_days FROM themes AS t1';
+            $queryGetid .= ' INNER JOIN chapters AS t2 ON t1.id_chapter = t2.id';
             $queryGetid .= ' WHERE t1.id = :id';
             $res = self::getConnection()->prepare($queryGetid);
             $res->bindParam(':id', $id);
@@ -57,7 +65,7 @@ class ModelAreas extends connect
     public static function delete($id)
     {
         try {
-            $query = 'DELETE FROM areas WHERE id = :id';
+            $query = 'DELETE FROM themes WHERE id = :id';
             $res = self::getConnection()->prepare($query);
             $res->bindParam(':id', $id);
             $res->execute();
@@ -72,13 +80,34 @@ class ModelAreas extends connect
     public static function update($id, $data)
     {
         try {
-            $query = 'UPDATE areas SET';
+            $query = 'UPDATE themes SET';
             $params = [];
 
-            if ($data['name'] !== null) {
-                $query .= ' name_area = :name_area,';
-                $params[':name_area'] = $data['name'];
+            if ($data['chapter'] !== null) {
+                $query .= ' id_chapter = :id_chapter,';
+                $params[':id_chapter'] = $data['chapter'];
             }
+            if (isset($data['name_theme'])) {
+                $query .= ' name_theme = :name_theme,';
+                $params[':name_theme'] = $data['name_theme'];
+            }
+            if (isset($data['start_date'])) {
+                $query .= ' start_date = :start_date,';
+                $params[':start_date'] = $data['start_date'];
+            }
+            if (isset($data['end_date'])) {
+                $query .= ' end_date = :end_date,';
+                $params[':end_date'] = $data['end_date'];
+            }
+            if (isset($data['description'])) {
+                $query .= ' description = :description,';
+                $params[':description'] = $data['description'];
+            }
+            if (isset($data['duration_days'])) {
+                $query .= ' duration_days = :duration_days,';
+                $params[':duration_days'] = $data['duration_days'];
+            }
+
 
             // Eliminar la coma final del query
             $query = rtrim($query, ',');

@@ -1,0 +1,71 @@
+<style>
+    .content-form {
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        flex-direction: column;
+        row-gap: 20px;
+        width: 100%;
+
+    }
+
+    fieldset{
+        padding: 10px;
+    }
+
+    .content-table{
+        margin: auto;
+        padding: auto;
+    }
+
+    .accion{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        gap: 20px;
+
+        font-size: 20px;
+    }
+
+    .accion button{
+        cursor: pointer;
+    }
+
+</style>
+
+<div class="head">
+    <h3>Countries</h3>
+</div>
+
+<div class="content-form" style="width: 100%;">
+    <form id="my-from">
+        <fieldset>
+            <legend>Crea un nuevo pais</legend>
+            <div class="form-group">
+                <label for="Countrie" style="margin: auto;">Countrie:</label>
+                <input type="text" name="name_country" class="form-control" id="Countrie" placeholder="Countrie">
+            </div>
+        </fieldset>
+        <div class="form-group">
+            <input type="submit" placeholder="Send">
+        </div>
+    </form>
+    <hr>
+    <div class="content-table" style="width: 100%;">
+        <table style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>Countrie</th>
+                    <th>Accion</th>
+                </tr>
+            </thead>
+            <tbody id="data-get">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- conteido -->

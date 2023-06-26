@@ -1,0 +1,78 @@
+<style>
+    .content-form {
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        flex-direction: column;
+        row-gap: 20px;
+        width: 100%;
+
+    }
+
+    fieldset{
+        padding: 10px;
+    }
+
+    .content-table{
+        margin: auto;
+        padding: auto;
+    }
+
+    .accion{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        gap: 20px;
+
+        font-size: 20px;
+    }
+
+    .accion button{
+        cursor: pointer;
+    }
+
+</style>
+
+<div class="head">
+    <h3>Regions</h3>
+</div>
+
+<div class="content-form" style="width: 100%;">
+    <form id="my-from">
+        <fieldset>
+            <legend>Crea un nuevo Cities</legend>
+            <div class="form-group">
+                <label for="Cities" style="margin: auto;">City:</label>
+                <input type="text" name="name_city" class="form-control" id="Cities" placeholder="Cities">
+            </div>
+            <div class="form-group">
+                <label for="region" style="margin: auto;">Region:</label>
+                <select name="region" id="region">
+                    
+                </select>
+            </div>
+        </fieldset>
+        <div class="form-group">
+            <input type="submit" placeholder="Send">
+        </div>
+    </form>
+    <hr>
+    <div class="content-table" style="width: 100%;">
+        <table style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>Citie</th>
+                    <th>Region</th>
+                    <th>Accion</th>
+                </tr>
+            </thead>
+            <tbody id="data-get">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- conteido -->

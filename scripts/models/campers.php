@@ -110,14 +110,31 @@ class ModelCampers extends connect
                 $query .= ' id_staff = :id_staff,';
                 $params[':id_staff'] = $data['staff'];
             }
-            if (isset($data['position'])) {
-                $query .= ' id_position = :id_position,';
-                $params[':id_position'] = $data['position'];
+            if (isset($data['route'])) {
+                $query .= ' id_route = :id_route,';
+                $params[':id_route'] = $data['route'];
             }
             if (isset($data['journeys'])) {
                 $query .= ' id_journeys = :id_journeys,';
                 $params[':id_journeys'] = $data['journeys'];
             }
+            if (isset($data['psycologist'])) {
+                $query .= ' id_psycologist = :id_psycologist,';
+                $params[':id_psycologist'] = $data['psycologist'];
+            }
+            if (isset($data['trainer'])) {
+                $query .= ' id_trainer = :id_trainer,';
+                $params[':id_trainer'] = $data['trainer'];
+            }
+            if (isset($data['teacher'])) {
+                $query .= ' id_teacher = :id_teacher,';
+                $params[':id_teacher'] = $data['teacher'];
+            }
+            if (isset($data['level'])) {
+                $query .= ' id_level = :id_level,';
+                $params[':id_level'] = $data['level'];
+            }
+
 
 
             // Eliminar la coma final del query
