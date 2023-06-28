@@ -8,7 +8,7 @@ export default {
     componet() {
         this.name = class extends HTMLElement {
 
-            url = "http://localhost/SpUkM01-073/admin-site/country/"
+            url = componet[3]+"country/"
 
             constructor() {
                 super();

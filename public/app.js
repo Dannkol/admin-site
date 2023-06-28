@@ -4,14 +4,19 @@ import myRegions from "./src/Ubicacion/my-regions.js";
 import myCities from "./src/Ubicacion/my-cities.js";
 import myArea from "./src/Administration/my-area.js";
 import myStaff from "./src/staff/my-staff.js";
+import myJourney from "./src/Administration/my-journey.js";
+import myLevels from "./src/Administration/my-levels.js";
+import myLocations from "./src/Administration/my-locations.js";
 
 mySubject.componet();
 myCountrie.componet();
 myRegions.componet();
 myCities.componet();
 myArea.componet();
-
+myJourney.componet();
+myLevels.componet();
 myStaff.componet();
+myLocations.componet();
 
 let vista = document.querySelector('#vista');
 

@@ -8,7 +8,7 @@ export default {
     componet() {
         this.name = class extends HTMLElement {
 
-            url = componet[3]+"cities/"
+            url = componet[3]+'locations/'
 
             constructor() {
                 super();
@@ -37,6 +37,7 @@ export default {
 
             async drawtable() {
 
+               
 
                 let headersList = {
                     "Accept": "application/json",
@@ -51,15 +52,12 @@ export default {
 
                 let data = await response.json();
                 console.log(data);
-                let plantilla_country = ''
-                let plantilla_tb = ''
+                let plantilla = ''
                 data.Message.forEach((item) => {
 
-                    plantilla_tb += `
-                    
+                    plantilla += `
                     <tr>
-                        <td>${item.name_city}</td>
-                        <td>${item.name_region}</td>
+                        <td>${item.name_location}</td>
                         <td >
                             <div class="accion">
                                 <div >
@@ -78,26 +76,9 @@ export default {
 
                         </td>
                     </tr>
-                    
-                    `
-
-
-                });
-
-                let response_counrty = await fetch("http://localhost/admin-site/regions", {
-                    method: "GET",
-                    headers: headersList
-                });
-                data = await response_counrty.json();
-                data.Message.forEach((item) => {
-
-                    plantilla_country += `
-                        <option value="${item.id}">${item.name_region}</option>
                     `
                 });
-
-                this.querySelector('#region').innerHTML = plantilla_country;
-                this.querySelector('#data-get').innerHTML = plantilla_tb;
+                this.querySelector('#data-get').innerHTML = plantilla;
             }
 
             async delete(item) {
@@ -117,44 +98,33 @@ export default {
                 this.drawtable();
             }
 
-            async put(cities, region, id) {
+            async put(data, id){
                 let headersList = {
                     "Accept": "application/json",
                     "Content-Type": "application/json"
-                }
+                   }
+                   
+                   let bodyContent = JSON.stringify({
+                     "name": data
+                   });
+                   
+                   let response = await fetch(`${this.url}${id}`, { 
+                     method: "PUT",
+                     body: bodyContent,
+                     headers: headersList
+                   });
+                   
+                   let res = await response.json();
 
-                let bodyContent = JSON.stringify({
-                    "name_city": cities,
-                    "region": region
-                });
-
-                let response = await fetch(`${this.url}${id}`, {
-                    method: "PUT",
-                    body: bodyContent,
-                    headers: headersList
-                });
-
-                let res = await response.json();
-
-                console.log(res);
-
-                res.Code == 200 ? alert(`item actualizado con exito`) : alert(`item no puedo ser actualizado`);
-
-                this.drawtable();
+                   res.Code == 200 ? alert(`item actualizado con exito`) : alert(`item no puedo ser actualizado`);
+                   
+                   this.drawtable();
             }
 
             edit(item) {
 
-                let select_country = this.querySelector('select');
-
-                let country = select_country.cloneNode(true);
-
                 let row = document.elementFromPoint(item.clientX, item.clientY).parentNode.parentNode.parentNode.parentNode
-                row.querySelectorAll('td')[0].innerHTML = `<input type="text" value="${row.querySelectorAll('td')[0].textContent}" class="form-control" ></input>`
-                row.querySelectorAll('td')[1].innerHTML = '';
-                row.querySelectorAll('td')[1].appendChild(country);
-
-
+                row.querySelector('td').innerHTML = `<input type="text" value="" class="form-control" placeholder="${row.querySelector('td').textContent}"></input>` 
                 item.target.innerHTML = `
                     <button data-status="ok">
                         OK
@@ -163,38 +133,38 @@ export default {
                 
                 `
                 row.querySelectorAll("[data-name='delete']")[0].dataset.name = 'close';
-                row.querySelectorAll("[data-name='close']")[0].addEventListener("click", () => {
+                row.querySelectorAll("[data-name='close']")[0].addEventListener("click", ()=>{
                     this.drawtable();
                 })
 
                 this.querySelector("button[data-status]").addEventListener("click", (e) => {
-                    e.target.dataset.status === 'ok' ? this.put(row.querySelector('input').value, row.querySelector('select').value, item.target.dataset.id) : null;
-                    e.target.dataset.name === 'delete' ? this.drawtable() : null;
+                    e.target.dataset.status === 'ok' ? this.put(row.querySelector('input').value,item.target.dataset.id) : null;
+                    e.target.dataset.name === 'delete' ? this.drawtable(): null;
                 })
 
-
+                
             }
 
             async acction() {
                 this.querySelector("#data-get").addEventListener("click", (e) => {
                     e.target.dataset.name === 'delete' ? this.delete(e.target.dataset) : null;
-                    e.target.dataset.name === 'edit' ? this.edit(e) : null;
+                    e.target.dataset.name === 'edit'? this.edit(e) : null;
                 })
             }
 
             async connectedCallback() {
 
                 //post
-                this.querySelector('#my-from').addEventListener('submit', async (e) => {
+                this.querySelector('#my-subject').addEventListener('submit', async (e) => {
                     e.preventDefault();
                     let data = Object.fromEntries(new FormData(e.target));
                     console.log(data);
+
 
                     let headersList = {
                         "Accept": "application/json",
                         "Content-Type": "application/json"
                     }
-                    console.log(data);
 
 
                     let response = await fetch(`${this.url}`, {

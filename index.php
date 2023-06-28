@@ -21,7 +21,10 @@ use App\ModelSubjects AS ModelSubjects;
 use App\ModelCountries AS ModelCountries;
 use App\ModelRegions AS ModelRegions;
 use App\ModelCities AS ModelCities;
-
+use App\ModelStaff AS ModelStaff;
+use App\ModelJourney AS ModelJourney;
+use App\ModelLevels AS ModelLevels;
+use App\Modellocations AS Modellocations;
 
 use Bramus\Router\Router as RouterRouter;
 
@@ -318,6 +321,158 @@ $router->mount('/cities', function() use ($router) {
 });
 
 
+//staff
+
+$router->mount('/staff', function() use ($router) {
+
+    $router->get('/', function() {
+        ModelStaff::getall();
+    });
+
+    $router->get('/(\d+)', function($id) {
+        ModelStaff::getid($id);
+    });
+
+    $router->delete('/(\d+)', function($id){
+        ModelStaff::delete($id);
+    });
+
+    /* 
+        para post y put el objeto a recibir es
+{
+                    "doc": inputs[0].value,
+                    "first_name": inputs[1].value,
+                    "second_name": inputs[2].value,
+                    "first_surname": inputs[3].value,
+                    "second_surname": inputs[4].value,
+                    "eps": inputs[5].value,
+                    "area": selects[0].value,
+                    "city": selects[1].value
+                  }
+    
+    */
+
+    $router->post('/', function(){
+        ModelStaff::post(json_decode(file_get_contents('php://input'), true));
+    });
+
+    $router->match('PUT|PATCH','/(\d+)', function($id){
+        ModelStaff::update($id , json_decode(file_get_contents('php://input'), true));
+    });
+
+
+});
+
+
+//journey
+
+
+$router->mount('/journeys', function() use ($router) {
+
+    $router->get('/', function() {
+        ModelJourney::getall();
+    });
+
+    $router->get('/(\d+)', function($id) {
+        ModelJourney::getid($id);
+    });
+
+    $router->delete('/(\d+)', function($id){
+        ModelJourney::delete($id);
+    });
+
+    /* 
+        para post y put el objeto a recibir es
+        {
+            "name_journey": "tarde",
+            "check_in": time,
+            "check_out": time,
+        }
+    
+    */
+
+    $router->post('/', function(){
+        ModelJourney::post(json_decode(file_get_contents('php://input'), true));
+    });
+
+    $router->match('PUT|PATCH','/(\d+)', function($id){
+        ModelJourney::update($id , json_decode(file_get_contents('php://input'), true));
+    });
+
+});
+
+
+//levels
+
+
+$router->mount('/levels', function() use ($router) {
+
+    $router->get('/', function() {
+        ModelLevels::getall();
+    });
+
+    $router->get('/(\d+)', function($id) {
+        ModelLevels::getid($id);
+    });
+
+    $router->delete('/(\d+)', function($id){
+        ModelLevels::delete($id);
+    });
+
+    /* 
+        para post y put el objeto a recibir es
+        {
+            "name_level": "tarde",
+            "group_level": time,
+        }
+    
+    */
+
+    $router->post('/', function(){
+        ModelLevels::post(json_decode(file_get_contents('php://input'), true));
+    });
+
+    $router->match('PUT|PATCH','/(\d+)', function($id){
+        ModelLevels::update($id , json_decode(file_get_contents('php://input'), true));
+    });
+
+});
+
+//locations
+
+
+$router->mount('/locations', function() use ($router) {
+
+    $router->get('/', function() {
+        Modellocations::getall();
+    });
+
+    $router->get('/(\d+)', function($id) {
+        Modellocations::getid($id);
+    });
+
+    $router->delete('/(\d+)', function($id){
+        Modellocations::delete($id);
+    });
+
+    /* 
+        para post y put el objeto a recibir es
+        {
+            "name_level": "tarde",
+            "group_level": time,
+        }
+    
+    */
+
+    $router->post('/', function(){
+        Modellocations::post(json_decode(file_get_contents('php://input'), true));
+    });
+
+    $router->match('PUT|PATCH','/(\d+)', function($id){
+        Modellocations::update($id , json_decode(file_get_contents('php://input'), true));
+    });
+
+});
 
 
 

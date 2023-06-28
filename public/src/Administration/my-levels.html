@@ -1,0 +1,75 @@
+<style>
+    .content-form {
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        flex-direction: column;
+        row-gap: 20px;
+        width: 100%;
+
+    }
+
+    fieldset{
+        padding: 10px;
+    }
+
+    .content-table{
+        margin: auto;
+        padding: auto;
+    }
+
+    .accion{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        gap: 20px;
+
+        font-size: 20px;
+    }
+
+    .accion button{
+        cursor: pointer;
+    }
+
+</style>
+
+<div class="head">
+    <h3>Areas</h3>
+</div>
+
+<div class="content-form" style="width: 100%;">
+    <form id="my-subject">
+        <fieldset>
+            <legend>Crea un nuevo Level</legend>
+            <div class="form-group">
+                <label for="name_level" style="margin: auto;">Level:</label>
+                <input type="text" name="name_level" class="form-control" id="name_level" placeholder="Area">
+            </div>
+            <div class="form-group">
+                <label for="group_level" style="margin: auto;">Group:</label>
+                <input type="text" name="group_level" class="form-control" id="group_level" placeholder="Group">
+            </div>
+        </fieldset>
+        <div class="form-group">
+            <input type="submit" placeholder="Send">
+        </div>
+    </form>
+    <hr>
+    <div class="content-table" style="width: 100%;">
+        <table style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>Area</th>
+                    <th>Accion</th>
+                </tr>
+            </thead>
+            <tbody id="data-get">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- conteido -->

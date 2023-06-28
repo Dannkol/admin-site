@@ -8,7 +8,7 @@ export default {
     componet() {
         this.name = class extends HTMLElement {
 
-            url = "http://localhost/SpUkM01-073/admin-site/regions/"
+            url = componet[3]+"regions/"
 
             constructor() {
                 super();
@@ -84,7 +84,7 @@ export default {
 
                 });
 
-                let response_counrty = await fetch("http://localhost/SpUkM01-073/admin-site/country", {
+                let response_counrty = await fetch("http://localhost/admin-site/country", {
                     method: "GET",
                     headers: headersList
                 });

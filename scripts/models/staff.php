@@ -34,8 +34,9 @@ class ModelStaff extends connect
     public static function getall()
     {
         try {
-            $queryGetAll = 'SELECT id AS "identificador", doc, first_name, second_name, first_surname, second_surname, eps, id_area, id_city FROM staff ';
-
+            $queryGetAll = 'SELECT t1.id AS "identificador", doc, first_name, second_name, first_surname, second_surname, eps, id_area, t2.name_area , id_city, t3.name_city FROM staff AS t1';
+            $queryGetAll .= ' INNER JOIN areas AS t2 ON t1.id_area = t2.id';
+            $queryGetAll .= ' INNER JOIN cities AS t3 ON t1.id_city = t3.id';
             $res = self::getConnection()->prepare($queryGetAll);
             $res->execute();
             self::$message = ["Code" => 200 + $res->rowCount(), "Message" => $res->fetchAll(\PDO::FETCH_ASSOC)];
@@ -49,7 +50,7 @@ class ModelStaff extends connect
     public static function getid($id)
     {
         try {
-            $queryGetid = 'SELECT id AS "identificador", doc, first_name, second_name, first_surname, second_surname, eps, id_area, id_city FROM staff ';
+            $queryGetid = 'SELECT id AS "identificador", doc, first_name, second_name, first_surname, second_surname, eps, id_area, id_city FROM staff';
             $queryGetid .= ' WHERE id = :id';
             $res = self::getConnection()->prepare($queryGetid);
             $res->bindParam(':id', $id);
